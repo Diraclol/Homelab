@@ -3,8 +3,11 @@ services:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
     restart: unless-stopped
+    networks:
+      - default
+      - ai_default
     ports:
-      - 3001:3000
+      - 127.0.0.1:3001:3000
     environment:
       - HOMEPAGE_ALLOWED_HOSTS=*
       - HOMEPAGE_VAR_IMMICH_KEY=${HOMEPAGE_VAR_IMMICH_KEY}
@@ -14,4 +17,6 @@ services:
       - ./images:/app/public/images:z
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/mnt/storage:/var/mnt/storage:ro
-networks: {}
+networks:
+  ai_default:
+    external: true

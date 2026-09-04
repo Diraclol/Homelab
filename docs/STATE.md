@@ -103,6 +103,7 @@ Desktop, and is driving the TV. No app install, no account, no password.
 | Aug 30 | Remote access via Tailscale subnet route |
 | Aug 30 | Immich phone app moved to the HTTPS name |
 | Aug 30 | **moonlight-web-stream deployed** — guest streams the TV from a browser, no install, no password |
+| Sep 4 | **Loopback binding** — every published port now binds 127.0.0.1; only Caddy reaches services. Homepage joined the `ai` network to reach Ollama by name. Immich pinned to v3.1.0. |
 
 ---
 
@@ -118,10 +119,6 @@ Desktop, and is driving the TV. No app install, no account, no password.
   doesn't drain. `grep . /sys/class/power_supply/BAT*/charge_control_end_threshold` = truth.
 - Optional: $15-20 energy-metering smart plug (Kasa/Tapo) — replaces wattage guesses
   with real numbers, and adds remote power-cycle as a last-resort unwedge.
-- **LAN hardening pass** (the cheap substitute for VLANs): inventory published ports
-  (`docker ps --format` + `sudo firewall-cmd --list-all`), then narrow the firewall to what's
-  actually used. Same session: SSH keys + disable password auth. ~30 min, zero hardware, reversible.
-
 ---
 
 ## PLANNED / DEFERRED — with triggers

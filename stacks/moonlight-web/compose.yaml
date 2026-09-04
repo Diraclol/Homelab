@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     network_mode: host
     environment:
-      - BIND_ADDRESS=0.0.0.0:8080
+      - BIND_ADDRESS=127.0.0.1:8080
       - WEBRTC_NAT_1TO1_HOST=192.168.x.x
       - WEBRTC_PORT_RANGE=40000:40100
     volumes:

@@ -9,7 +9,7 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility
     ports:
-      - 11434:11434
+      - 127.0.0.1:11434:11434
     volumes:
       - /var/mnt/storage/ollama:/root/.ollama:z
   open-webui:
@@ -18,11 +18,11 @@ services:
     restart: unless-stopped
     environment:
       - ENABLE_SIGNUP=false
-      - WEBUI_URL=https://webui.example.duckdns.org
+      - WEBUI_URL=https://webui.fx504.duckdns.org
       - OLLAMA_BASE_URL=http://ollama:11434
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
     ports:
-      - 3000:8080
+      - 127.0.0.1:3000:8080
     volumes:
       - ./webui-data:/app/backend/data:z
     depends_on:

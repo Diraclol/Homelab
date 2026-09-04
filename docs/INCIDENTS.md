@@ -355,6 +355,50 @@ RULE:    A black stream with a live tab means the SERVER restarted, not that the
          touching anything network-related.
 ```
 
+### [2026-09-04] Secret hardcoded in a compose file — FOUND BY PRE-PUBLISH SCAN, ROTATED
+
+```
+SYMPTOM: Preparing this repo for publication. The scan flagged a literal 64-hex value
+         on a WEBUI_SECRET_KEY= line in the ai stack's compose.yaml.
+CAUSE:   The value had been pasted straight into compose instead of referenced as
+         ${WEBUI_SECRET_KEY} from .env. Worked fine for months; nobody looks at a
+         working compose file.
+FIX:     Rotate the key (openssl rand -hex 32), move it to .env, reference it from
+         compose, recreate the container, confirm the container sees the new value.
+RULE:    Secrets are ${VAR} references in compose; values live in .env only. A
+         pre-publish scan is how you find out you broke this. Scan before every push.
+```
+
+### [2026-09-04] Appended to .env, variable "not set" — SOLVED
+
+```
+SYMPTOM: echo "KEY=..." >> .env, then compose warned the variable was not set.
+         grep -c '^KEY=' .env returned 0.
+CAUSE:   The file (Dockge's placeholder, "# VARIABLE=value #comment") had no trailing
+         newline. The append glued onto the comment line, so the whole thing stayed
+         a comment. 107 bytes: 25 + 17 + 64 + 1. The arithmetic was the proof.
+FIX:     Overwrite the file (tee without -a). Nothing real was in it.
+RULE:    Before appending to any file you didn't write: sed -i -e '$a\' file
+         guarantees a trailing newline. Then verify with cat -A, not with faith.
+RULE:    Stack dirs are root-owned. A failed non-sudo write is silent in a pipeline;
+         check the exit, then check the file.
+```
+
+### [2026-09-04] LAN hardening at the compose layer — DONE
+
+```
+CHANGE:  Every published port now binds 127.0.0.1 instead of 0.0.0.0. Only Caddy
+         (host network) can reach services; nothing bypasses the proxy.
+GOTCHA:  Homepage runs on the bridge network and reached widgets via <LAN IP>:<port>.
+         Loopback-bound host ports are NOT reachable from a bridge container, even via
+         the docker gateway. Fix: widgets go through the HTTPS names, and Homepage joins
+         the ai stack's network (external: true) to reach Ollama by container name.
+RULE:    Measure before building: grep the dashboard config for host ports BEFORE
+         closing them. Three widgets would have broken silently.
+RULE:    Bind to loopback in compose, not in the firewall. It is per-service, and a
+         firewall zone reset cannot undo it.
+```
+
 ### [2026-08-31] Battery charge cap believed set, battery at 100% — SOLVED
 
 ```
