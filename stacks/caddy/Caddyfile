@@ -1,5 +1,5 @@
 {
-	email junguy256@gmail.com
+	email {env.ACME_EMAIL}
 }
 
 (headers) {
