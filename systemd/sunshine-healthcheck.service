@@ -1,0 +1,6 @@
+[Unit]
+Description=Restart Sunshine if not listening on 47990
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'ss -tln | grep -q ":47990 " || systemctl --user restart app-dev.lizardbyte.app.Sunshine'

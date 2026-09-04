@@ -1,0 +1,72 @@
+{
+	email junguy256@gmail.com
+}
+
+(headers) {
+	header {
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin"
+		X-Robots-Tag "noindex, nofollow, nosnippet, noarchive"
+	}
+}
+
+example.duckdns.org, *.example.duckdns.org {
+	import headers
+	tls {
+		dns duckdns {env.DUCKDNS_API_TOKEN}
+		propagation_delay 2m
+	}
+
+	@webui host webui.example.duckdns.org
+	handle @webui {
+		reverse_proxy 127.0.0.1:3000
+	}
+
+	@photos host photos.example.duckdns.org
+	handle @photos {
+		reverse_proxy 127.0.0.1:2283
+	}
+
+	@dockge host dockge.example.duckdns.org
+	handle @dockge {
+		reverse_proxy 127.0.0.1:5001
+	}
+
+	@home host home.example.duckdns.org
+	handle @home {
+		reverse_proxy 127.0.0.1:3001
+	}
+
+	@glances host glances.example.duckdns.org
+	handle @glances {
+		reverse_proxy 127.0.0.1:61208
+	}
+
+	@cockpit host cockpit.example.duckdns.org
+	handle @cockpit {
+		reverse_proxy https://127.0.0.1:9090 {
+			transport http {
+				tls_insecure_skip_verify
+			}
+		}
+	}
+
+	@stream host stream.example.duckdns.org
+	handle @stream {
+		reverse_proxy https://127.0.0.1:47990 {
+			transport http {
+				tls_insecure_skip_verify
+			}
+		}
+	}
+
+	@tv host tv.example.duckdns.org
+	handle @tv {
+		reverse_proxy 127.0.0.1:8080
+	}
+
+	handle {
+		redir https://home.example.duckdns.org{uri}
+	}
+}

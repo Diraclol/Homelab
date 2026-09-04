@@ -1,0 +1,17 @@
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    restart: unless-stopped
+    ports:
+      - 3001:3000
+    environment:
+      - HOMEPAGE_ALLOWED_HOSTS=*
+      - HOMEPAGE_VAR_IMMICH_KEY=${HOMEPAGE_VAR_IMMICH_KEY}
+      - HOMEPAGE_VAR_WEBUI_KEY=${HOMEPAGE_VAR_WEBUI_KEY}
+    volumes:
+      - ./config:/app/config:z
+      - ./images:/app/public/images:z
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/mnt/storage:/var/mnt/storage:ro
+networks: {}

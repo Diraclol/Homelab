@@ -1,0 +1,30 @@
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    restart: unless-stopped
+    runtime: nvidia
+    environment:
+      - OLLAMA_KEEP_ALIVE=1h
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    ports:
+      - 11434:11434
+    volumes:
+      - /var/mnt/storage/ollama:/root/.ollama:z
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: unless-stopped
+    environment:
+      - ENABLE_SIGNUP=false
+      - WEBUI_URL=https://webui.example.duckdns.org
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+    ports:
+      - 3000:8080
+    volumes:
+      - ./webui-data:/app/backend/data:z
+    depends_on:
+      - ollama
+networks: {}
