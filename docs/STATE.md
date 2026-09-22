@@ -1,6 +1,6 @@
 # fx504 — Tracking
 
-*Last updated: 2026-08-30, late evening*
+*Last updated: 2026-09-22, evening*
 *Status document. What's running, what's done, what's next. No fix procedures — those live in `fx504-recovery-cribsheet-v9.md`.*
 
 ---

@@ -1,7 +1,7 @@
 # Homelab
 
 Self-hosted services on a single repurposed laptop (Asus TUF FX504, i5-8300H, 24 GB RAM,
-GTX 1050) running Bazzite, an immutable Fedora-based OS. Eleven containers across seven
+GTX 1050) running Bazzite, an immutable Fedora-based OS. Ten containers across seven
 Docker Compose stacks, every service behind HTTPS on a wildcard Let's Encrypt certificate,
 reachable from anywhere over Tailscale with nothing exposed to the public internet.
 
@@ -13,7 +13,7 @@ reachable from anywhere over Tailscale with nothing exposed to the public intern
 |---|---|---|
 | `caddy` | Caddy (custom build) + DuckDNS | Reverse proxy, wildcard TLS via DNS-01 |
 | `immich` | Immich + Postgres + Redis + ML | Self-hosted photo library (replaces Google Photos) |
-| `ai` | Ollama + Open WebUI | Local LLM inference on the GPU |
+| `freellmapi` | FreeLLMAPI | Free-tier LLM router/gateway with context handoff |
 | `homepage` | Homepage | Service dashboard with live status |
 | `dockge` | Dockge | Compose stack management UI |
 | `glances` | Glances | Host monitoring |
