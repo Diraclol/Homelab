@@ -1,0 +1,92 @@
+- System:
+    - CPU:
+        description: i5-8300H · 2.3-4.0G
+        widget:
+          type: glances
+          url: http://192.168.1.100:61208
+          version: 4
+          metric: cpu
+    - Memory:
+        description: 24 GB DDR4-2400
+        widget:
+          type: glances
+          url: http://192.168.1.100:61208
+          version: 4
+          metric: memory
+    - GPU:
+        description: GTX 1050 · 2GB GDDR5
+        widget:
+          type: glances
+          url: http://192.168.1.100:61208
+          version: 4
+          metric: gpu:nvidia0
+    - Storage (NVMe):
+        description: SPCC M.2 256GB · OS + apps
+        widget:
+          type: glances
+          url: http://192.168.1.100:61208
+          version: 4
+          metric: fs:/nvme
+    - Storage (SATA):
+        description: SPCC 1TB · homelab data
+        widget:
+          type: glances
+          url: http://192.168.1.100:61208
+          version: 4
+          metric: fs:/var/mnt/storage
+    - Ethernet:
+        description: enp3s0 · 1 GbE · wired
+        widget:
+          type: glances
+          url: http://192.168.1.100:61208
+          version: 4
+          metric: network:enp3s0
+    - Glances:
+        icon: glances.png
+        href: https://glances.example.duckdns.org
+        description: Advanced view
+        siteMonitor: http://192.168.1.100:61208
+    - Cockpit:
+        icon: cockpit.png
+        href: https://cockpit.example.duckdns.org
+        description: System management
+        siteMonitor: https://192.168.1.100:9090
+        skipTlsVerify: true
+- Homelab:
+    - Dockge:
+        icon: dockge.png
+        href: https://dockge.example.duckdns.org
+        description: Compose stacks
+        server: local
+        container: dockge
+    - Immich:
+        icon: immich.png
+        href: https://photos.example.duckdns.org
+        description: Photos
+        server: local
+        container: immich_server
+        widget:
+          type: immich
+          url: https://photos.example.duckdns.org
+          key: {{HOMEPAGE_VAR_IMMICH_KEY}}
+          version: 2
+    - FreeLLMAPI:
+        icon: mdi-robot
+        href: https://llm.example.duckdns.org
+        description: Multi-provider LLM gateway
+        server: local
+        container: freellmapi
+    - Sunshine:
+        icon: sunshine.png
+        href: https://stream.example.duckdns.org
+        description: Game streaming host
+        siteMonitor: https://192.168.1.100:47990
+        skipTlsVerify: true
+        statusStyle: dot
+
+    - Moonlight Web:
+        icon: /images/moonlight.png
+        href: https://tv.example.duckdns.org
+        description: Stream the TV from a browser
+        siteMonitor: https://tv.example.duckdns.org
+        statusStyle: dot

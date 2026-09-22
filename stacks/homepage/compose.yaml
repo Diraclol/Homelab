@@ -5,7 +5,6 @@ services:
     restart: unless-stopped
     networks:
       - default
-      - ai_default
     ports:
       - 127.0.0.1:3001:3000
     environment:
@@ -17,6 +16,3 @@ services:
       - ./images:/app/public/images:z
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/mnt/storage:/var/mnt/storage:ro
-networks:
-  ai_default:
-    external: true

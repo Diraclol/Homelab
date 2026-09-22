@@ -18,11 +18,6 @@ example.duckdns.org, *.example.duckdns.org {
 		propagation_delay 2m
 	}
 
-	@webui host webui.example.duckdns.org
-	handle @webui {
-		reverse_proxy 127.0.0.1:3000
-	}
-
 	@photos host photos.example.duckdns.org
 	handle @photos {
 		reverse_proxy 127.0.0.1:2283
@@ -64,6 +59,11 @@ example.duckdns.org, *.example.duckdns.org {
 	@tv host tv.example.duckdns.org
 	handle @tv {
 		reverse_proxy 127.0.0.1:8080
+	}
+
+	@llm host llm.example.duckdns.org
+	handle @llm {
+		reverse_proxy 127.0.0.1:8082
 	}
 
 	handle {
