@@ -35,19 +35,18 @@
 
 ## WHAT'S RUNNING
 
-**11 containers across 7 stacks** — `ai`, `caddy`, `dockge`, `glances`, `homepage`, `immich`, `moonlight-web`
+**12 containers across 8 stacks** — `caddy`, `dockge`, `filebrowser`, `freellmapi`, `glances`, `homepage`, `immich`, `moonlight-web`
 
 | Service | URL | Port |
 |---|---|---|
-| Homepage | `home.example.duckdns.org` | 3001 |
-| Open WebUI | `webui.example.duckdns.org` | 3000 |
-| Immich | `photos.example.duckdns.org` | 2283 |
-| Dockge | `dockge.example.duckdns.org` | 5001 |
-| Glances | `glances.example.duckdns.org` | 61208 |
-| Cockpit | `cockpit.example.duckdns.org` | 9090 |
-| Sunshine (web UI) | `stream.example.duckdns.org` | 47990 |
-| Moonlight Web | `tv.example.duckdns.org` | 8080 |
-| Ollama | — | 11434 |
+| Homepage | `home.fx504.duckdns.org` | 3001 |
+| FileBrowser | `filebrowser.fx504.duckdns.org` | 8085 |
+| FreeLLMAPI | `llm.fx504.duckdns.org` | 8082 |
+| Immich | `photos.fx504.duckdns.org` | 2283 |
+| Dockge | `dockge.fx504.duckdns.org` | 5001 |
+| Glances | `glances.fx504.duckdns.org` | 61208 |
+| Sunshine (web UI) | `stream.fx504.duckdns.org` | 47990 |
+| Moonlight Web | `tv.fx504.duckdns.org` | 8080 |
 
 All HTTPS, real Let's Encrypt wildcard cert, **no port numbers in URLs**. Bare `example.duckdns.org` redirects to home.
 

@@ -30,3 +30,6 @@ model-cache/
 .DS_Store
 .idea/
 .vscode/
+
+# Ignore Notion update script
+update_notion_ceg3155.py

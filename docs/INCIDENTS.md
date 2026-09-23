@@ -35,7 +35,7 @@ CPU: i5-8300H (4c/8t)   RAM: 24GB   GPU: NVIDIA GTX 1050, 2GB VRAM
 LAN: 192.168.x.x (wlo1, wifi) | 192.168.x.x (enp3s0, ethernet, preferred metric 100)
 TAILSCALE: 100.x.x.x, advertises subnet route 192.168.x.x/32
 SSH: user@192.168.x.x
-STACKS: /var/mnt/storage/docker/stacks/ — ai, caddy, dockge, glances, homepage, immich, moonlight-web
+STACKS: /var/mnt/storage/docker/stacks/ — caddy, dockge, filebrowser, freellmapi, glances, homepage, immich, moonlight-web
 DATA: 1TB SATA at /var/mnt/storage | 236GB NVMe for OS
 FIREWALL: firewalld, desktop default zone (port inventory pass pending)
 BATTERY: /sys/class/power_supply/BAT1 (NOT BAT0). AC adapter = ACAD.
@@ -99,7 +99,7 @@ RULE:    Always keep a pinned known-good ostree deployment.
 CHECK:   If `groups` shows only user, this happened. Reboot to previous deployment.
 ```
 
-### [2026-07 → 2026-08-29] Ollama ran on CPU for six weeks — SOLVED
+### [2026-07 → 2026-08-29] Ollama ran on CPU for six weeks — SOLVED (then removed)
 
 ```
 SYMPTOM: Local models painfully slow. Assumed the 2GB GPU was too small.
@@ -114,6 +114,7 @@ RULE:    Before blaming hardware, prove the container can see it:
          docker exec <container> nvidia-smi
 NOTE:    OLLAMA_KEEP_ALIVE belongs on the ollama service, not on open-webui.
 NOTE:    `ollama ps` showing a CPU/GPU split is expected on 2GB. Not a fault.
+REMOVED: ai stack (ollama + open-webui) replaced by freellmapi in 2026-09.
 ```
 
 ### [2026-08-29] Silent file-edit failures in stack dirs — SOLVED
@@ -249,6 +250,7 @@ RULE:    Any MCP server added with all tools enabled is a permanent tax on every
          request. Always scope.
 NOTE:    Same failure shape as Open WebUI injecting builtin tool schemas (2050 tokens
          into a one-word prompt). Disable Builtin Tools per-model for small local models.
+         (Open WebUI removed 2026-09, replaced by FreeLLMAPI — this note is historical.)
 ```
 
 ### [2026-08-30] moonlight-web could not pair with Sunshine — SOLVED after 4 attempts
@@ -392,7 +394,9 @@ CHANGE:  Every published port now binds 127.0.0.1 instead of 0.0.0.0. Only Caddy
 GOTCHA:  Homepage runs on the bridge network and reached widgets via <LAN IP>:<port>.
          Loopback-bound host ports are NOT reachable from a bridge container, even via
          the docker gateway. Fix: widgets go through the HTTPS names, and Homepage joins
-         the ai stack's network (external: true) to reach Ollama by container name.
+         the freellmapi stack's network (external: true) to reach LLMs by container name.
+         (Historical note: original fix referenced the `ai` stack; ollama+open-webui was
+         replaced by freellmapi in 2026-09.)
 RULE:    Measure before building: grep the dashboard config for host ports BEFORE
          closing them. Three widgets would have broken silently.
 RULE:    Bind to loopback in compose, not in the firewall. It is per-service, and a
@@ -491,8 +495,8 @@ composefs / at 100% in df or file mgr  → Bazzite's read-only 45MB immutable ro
    Re-pair Moonlight.
 6. Network: recreate powersave conf + sysctl. Re-advertise Tailscale route
    (192.168.x.x/32) and approve it.
-7. VERIFY the ai stack still has `runtime: nvidia` — without it Ollama silently
-   runs on CPU and you will not notice for weeks.
+7. VERIFY container runtime health — no AI stacks currently require NVIDIA runtime,
+   but if you add GPU work later, check `docker inspect <container> | grep Runtime`.
 8. Caddy: rebuild the image (docker compose build), restore .env with the
    DuckDNS token, open http/https in firewalld.
 9. moonlight-web: deploy stack, re-apply the guest-account and cookie settings from
