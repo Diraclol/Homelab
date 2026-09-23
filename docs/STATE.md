@@ -167,3 +167,8 @@ Hermes was built on an assumption and cost six hours. Copilot was installed and 
 ## COMPANION FILE
 
 `fx504-recovery-cribsheet-v9.md` — keep it. It holds the things you'd have to relearn the hard way: the Sunshine reboot fix, Bazzite recovery, the Caddy build, Notion's data-source quirk, and every "don't do this again" lesson. Reference material, not a status doc.
+
+## RECENT WORK (2026-09-22)
+- FileBrowser deployed for file transfers — accessible at filebrowser.fx504.duckdns.org
+- Created drive folder structure: `/var/mnt/storage/drive/uploads/` and `drive/claude-output/`
+- Added FileBrowser to Caddy reverse proxy and Homepage dashboard
