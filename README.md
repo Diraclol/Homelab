@@ -1,7 +1,7 @@
 # Homelab
 
 Self-hosted services on a single repurposed laptop (Asus TUF FX504, i5-8300H, 24 GB RAM,
-GTX 1050) running Bazzite, an immutable Fedora-based OS. Ten containers across seven
+GTX 1050) running Bazzite, an immutable Fedora-based OS. Eleven containers across eight
 Docker Compose stacks, every service behind HTTPS on a wildcard Let's Encrypt certificate,
 reachable from anywhere over Tailscale with nothing exposed to the public internet.
 
@@ -18,6 +18,7 @@ reachable from anywhere over Tailscale with nothing exposed to the public intern
 | `dockge` | Dockge | Compose stack management UI |
 | `glances` | Glances | Host monitoring |
 | `moonlight-web` | Moonlight Web + Sunshine | Browser-based game/desktop streaming to the living-room TV |
+| `filebrowser` | FileBrowser | Web-based file manager for uploads and Claude-generated files |
 
 ## Design in one paragraph
 
