@@ -1,0 +1,30 @@
+services:
+  hermes-webui:
+    image: ghcr.io/nesquena/hermes-webui:latest
+    container_name: hermes-webui
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8787:8787"
+    volumes:
+      - ${HERMES_HOME:-/var/mnt/storage/hermes-data}:/home/hermeswebui/.hermes
+      - ${HERMES_WORKSPACE:-/home/jguy/Workspace}:/workspace
+    environment:
+      - WANTED_UID=${UID:-1000}
+      - WANTED_GID=${GID:-1000}
+      - HERMES_WEBUI_HOST=0.0.0.0
+      - HERMES_WEBUI_PORT=8787
+      - HERMES_WEBUI_STATE_DIR=/home/hermeswebui/.hermes/webui
+      - HERMES_WEBUI_PASSWORD=${HERMES_WEBUI_PASSWORD:-}
+      # Gateway mode — connect to freellmapi
+      - HERMES_WEBUI_CHAT_BACKEND=${HERMES_WEBUI_CHAT_BACKEND:-gateway}
+      - HERMES_WEBUI_GATEWAY_BASE_URL=${HERMES_WEBUI_GATEWAY_BASE_URL:-http://127.0.0.1:8082}
+      - HERMES_WEBUI_GATEWAY_API_KEY=${HERMES_WEBUI_GATEWAY_API_KEY:-}
+    depends_on:
+      freellmapi:
+        condition: service_healthy
+    networks:
+      - hermes-net
+
+networks:
+  hermes-net:
+    driver: bridge
