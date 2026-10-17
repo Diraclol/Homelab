@@ -1,0 +1,7 @@
+[Unit]
+Description=Pin DuckDNS A record to the LAN IP (homelab design)
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash /etc/duckdns-pin-lan.sh

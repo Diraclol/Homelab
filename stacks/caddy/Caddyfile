@@ -1,5 +1,5 @@
 {
-	email {env.ACME_EMAIL}
+	email junguy256@gmail.com
 }
 
 (headers) {
@@ -11,34 +11,34 @@
 	}
 }
 
-example.duckdns.org, *.example.duckdns.org {
+fx504.duckdns.org, *.fx504.duckdns.org {
 	import headers
 	tls {
 		dns duckdns {env.DUCKDNS_API_TOKEN}
 		propagation_delay 2m
 	}
 
-	@photos host photos.example.duckdns.org
+	@photos host photos.fx504.duckdns.org
 	handle @photos {
 		reverse_proxy 127.0.0.1:2283
 	}
 
-	@dockge host dockge.example.duckdns.org
+	@dockge host dockge.fx504.duckdns.org
 	handle @dockge {
 		reverse_proxy 127.0.0.1:5001
 	}
 
-	@home host home.example.duckdns.org
+	@home host home.fx504.duckdns.org
 	handle @home {
 		reverse_proxy 127.0.0.1:3001
 	}
 
-	@glances host glances.example.duckdns.org
+	@glances host glances.fx504.duckdns.org
 	handle @glances {
 		reverse_proxy 127.0.0.1:61208
 	}
 
-	@cockpit host cockpit.example.duckdns.org
+	@cockpit host cockpit.fx504.duckdns.org
 	handle @cockpit {
 		reverse_proxy https://127.0.0.1:9090 {
 			transport http {
@@ -47,7 +47,7 @@ example.duckdns.org, *.example.duckdns.org {
 		}
 	}
 
-	@stream host stream.example.duckdns.org
+	@stream host stream.fx504.duckdns.org
 	handle @stream {
 		reverse_proxy https://127.0.0.1:47990 {
 			transport http {
@@ -56,21 +56,22 @@ example.duckdns.org, *.example.duckdns.org {
 		}
 	}
 
-	@tv host tv.example.duckdns.org
+	@tv host tv.fx504.duckdns.org
 	handle @tv {
 		reverse_proxy 127.0.0.1:8080
 	}
-	@llm host llm.example.duckdns.org
+
+	@llm host llm.fx504.duckdns.org
 	handle @llm {
 		reverse_proxy 127.0.0.1:8082
 	}
 
-	@webui host webui.example.duckdns.org
-	handle @webui {
-		respond "404 Not Found" 404
+	@filebrowser host filebrowser.fx504.duckdns.org
+	handle @filebrowser {
+		reverse_proxy 127.0.0.1:8085
 	}
 
 	handle {
-		redir https://home.example.duckdns.org{uri}
+		redir https://home.fx504.duckdns.org{uri}
 	}
 }
