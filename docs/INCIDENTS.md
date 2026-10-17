@@ -557,3 +557,57 @@ Claude Code            NO free path. Subscription or API billing only.
 ```
 
 **RULE: Gemini limits are per Google Cloud PROJECT, not per API key.** Extra keys on the same project do not help. RPD resets midnight Pacific. Read them off AI Studio's rate-limits page, never a blog post.
+
+### [2026-10-17] All *.fx504.duckdns.org names dead — DuckDNS A record repointed to public IP — SOLVED
+
+```
+SYMPTOM: Every *.fx504.duckdns.org hostname timed out from every device after a
+         Hermes WebUI rename and many Caddy restarts. Confusingly, home.* etc.
+         still "worked" when tested ON the host — because a prior session had added
+         /etc/hosts entries there. The names NOT in that file (bare fx504.duckdns.org,
+         hermes.*) exposed the truth: they resolved to the PUBLIC IP 38.131.94.137.
+CAUSE:   The DuckDNS A record for fx504.duckdns.org had been reset to the host's
+         PUBLIC IP (38.131.94.137). The design REQUIRES the private LAN IP
+         (192.168.4.38). Trigger: Caddy's DuckDNS DNS-01 challenge. Each challenge
+         calls the DuckDNS /update API to write the TXT record, and /update also
+         resets the A record to the caller's source IP (the public IP) as a side
+         effect. It ran fine Aug 30 -> Oct 16 (no renewals in that window); a cert
+         for the bare domain was obtained Oct 17 ~05:32 UTC during the restart
+         activity, which ran a DNS-01 challenge and clobbered the A record.
+FIX:     Two parts:
+         1. Reset the record:
+            curl "https://www.duckdns.org/update?domains=fx504&token=$TOKEN&ip=192.168.4.38"
+            (token read from stacks/caddy/.env). Verify:
+            dig +short @ns1.duckdns.org fx504.duckdns.org A  -> 192.168.4.38
+         2. Added a systemd timer that re-pins the LAN IP every 15 min so a future
+            renewal cannot leave it on the public IP:
+            - /etc/duckdns-pin-lan.sh  (sources DUCKDNS_API_TOKEN from caddy .env,
+              auto-detects the LAN IP via `ip route get`, calls DuckDNS /update)
+            - /etc/systemd/system/duckdns-pin-lan.service  (Type=oneshot)
+            - /etc/systemd/system/duckdns-pin-lan.timer
+              (OnBootSec=2min, OnUnitActiveSec=15min, Persistent=true) — ENABLED.
+         Also removed dead @webui (->8787) and @n8n (->5678) Caddyfile routes;
+         pre-cleanup copy at stacks/caddy/Caddyfile.prev-cleanup, old backup
+         variants moved to stacks/caddy/_archive_20261017/.
+RULE:    DuckDNS /update resets the A record to the caller's PUBLIC IP on EVERY
+         DNS-01 challenge (cert obtain OR renewal). The pin timer is MANDATORY —
+         without it the next renewal silently breaks every hostname ~60 days later.
+RULE:    The A record MUST be the LAN IP (192.168.4.38). DNS-01 proves control via
+         a TXT record, so a private A record does NOT block cert issuance.
+RULE:    Diagnose DuckDNS from an authoritative query, never the host's own resolver:
+         dig +short @ns1.duckdns.org <name> A   (or a DoH query). /etc/hosts entries
+         on the host MASK a wrong A record and send you chasing the wrong cause.
+NOTE:    Two red herrings from the troubleshooting — do NOT re-investigate:
+         - "SNI mismatch": only occurs when typing the bare IP (https://192.168.4.38)
+           into a browser. Access by hostname is fine. Not a real problem.
+         - propagation_delay "reverting to 120000000000": that value is 2m in
+           NANOSECONDS and is CORRECT. The 120000 in /config/caddy/autosave.json is
+           a stale manual edit; Caddy loads the Caddyfile, not autosave.json, on
+           normal startup. Do NOT change propagation_delay.
+NOTE:    Do NOT add hosts-file entries on client devices (the ThinkPad). With the A
+         record correct, DNS resolves everywhere. The prior session's hosts advice
+         was wrong and was never applied to the ThinkPad.
+CHECK:   A record correct?   dig +short @ns1.duckdns.org fx504.duckdns.org A  -> :192.168.4.38
+CHECK:   Pin timer alive?    systemctl list-timers duckdns-pin-lan.timer
+```
+

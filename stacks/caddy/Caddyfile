@@ -70,6 +70,10 @@ fx504.duckdns.org, *.fx504.duckdns.org {
 	handle @filebrowser {
 		reverse_proxy 127.0.0.1:8085
 	}
+    @hermes host hermes.fx504.duckdns.org
+    handle @hermes {
+        reverse_proxy 127.0.0.1:8787
+    }
 
 	handle {
 		redir https://home.fx504.duckdns.org{uri}
