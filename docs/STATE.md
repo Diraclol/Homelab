@@ -12,7 +12,7 @@
 | **Homelab** | Done and stable. Nothing outstanding. |
 | **Remote access** | Done. Works from anywhere via Tailscale. |
 | **TV guest streaming** | Done. Browser URL, no install. |
-| **Agent / AI layer** | Nothing installed. Deliberate. |
+| **Agent / AI layer** | Hermes WebUI (gateway mode) deployed 2026-10-17. Connected to FreeLLMAPI. |
 
 ---
 
@@ -35,13 +35,14 @@
 
 ## WHAT'S RUNNING
 
-**12 containers across 8 stacks** — `caddy`, `dockge`, `filebrowser`, `freellmapi`, `glances`, `homepage`, `immich`, `moonlight-web`
+**13 containers across 9 stacks** — `caddy`, `dockge`, `filebrowser`, `freellmapi`, `glances`, `hermes-webui`, `homepage`, `immich`, `moonlight-web`
 
 | Service | URL | Port |
 |---|---|---|
 | Homepage | `home.fx504.duckdns.org` | 3001 |
 | FileBrowser | `filebrowser.fx504.duckdns.org` | 8085 |
 | FreeLLMAPI | `llm.fx504.duckdns.org` | 8082 |
+| Hermes WebUI | `hermes.fx504.duckdns.org` | 8787 |
 | Immich | `photos.fx504.duckdns.org` | 2283 |
 | Dockge | `dockge.fx504.duckdns.org` | 5001 |
 | Glances | `glances.fx504.duckdns.org` | 61208 |
@@ -103,6 +104,7 @@ Desktop, and is driving the TV. No app install, no account, no password.
 | Aug 30 | Immich phone app moved to the HTTPS name |
 | Aug 30 | **moonlight-web-stream deployed** — guest streams the TV from a browser, no install, no password |
 | Sep 4 | **Loopback binding** — every published port now binds 127.0.0.1; only Caddy reaches services. Homepage joined the `ai` network to reach Ollama by name. Immich pinned to v3.1.0. |
+| Oct 17 | **Hermes WebUI redeployed** — connected to FreeLLMAPI gateway, loopback binding, `@hermes` route in Caddyfile (inside wildcard block to avoid DNS-01 challenge). See [HERMES_ARCHITECTURE.md](HERMES_ARCHITECTURE.md) |
 
 ---
 
